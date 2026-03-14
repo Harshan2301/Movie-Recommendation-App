@@ -1,0 +1,856 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gold: #E8B84B;
+    --gold-dim: #9A7A30;
+    --bg: #0A0A0F;
+    --bg2: #111118;
+    --bg3: #1A1A24;
+    --surface: #1E1E2A;
+    --border: rgba(255,255,255,0.08);
+    --text: #F0EDE6;
+    --muted: #8A8799;
+    --red: #E05252;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* NAVBAR */
+  .navbar {
+    background: rgba(10,10,15,0.95);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(12px);
+  }
+  .logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    letter-spacing: 2px;
+    color: var(--gold);
+  }
+  .logo span { color: var(--text); }
+  .nav-links { display: flex; gap: 24px; align-items: center; }
+  .nav-link {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--muted);
+    cursor: pointer;
+    transition: color 0.2s;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    background: none;
+    border: none;
+    font-family: inherit;
+  }
+  .nav-link:hover, .nav-link.active { color: var(--gold); }
+  .nav-link.active { font-weight: 500; }
+
+  /* HERO SEARCH */
+  .hero {
+    padding: 60px 24px 48px;
+    text-align: center;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .hero-label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+    font-weight: 500;
+  }
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(44px, 8vw, 80px);
+    letter-spacing: 3px;
+    line-height: 0.95;
+    margin-bottom: 32px;
+  }
+  .hero-title em { color: var(--gold); font-style: normal; }
+
+  .search-wrap {
+    display: flex;
+    max-width: 580px;
+    margin: 0 auto;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    background: var(--surface);
+    transition: border-color 0.2s;
+  }
+  .search-wrap:focus-within { border-color: var(--gold); }
+  .search-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 14px 18px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    color: var(--text);
+  }
+  .search-input::placeholder { color: var(--muted); }
+  .search-btn {
+    background: var(--gold);
+    border: none;
+    padding: 14px 24px;
+    cursor: pointer;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    letter-spacing: 2px;
+    color: #0A0A0F;
+    transition: background 0.2s;
+  }
+  .search-btn:hover { background: #d4a63f; }
+
+  /* API KEY NOTICE */
+  .api-notice {
+    background: rgba(232,184,75,0.1);
+    border: 1px solid rgba(232,184,75,0.3);
+    border-radius: 6px;
+    padding: 12px 18px;
+    max-width: 580px;
+    margin: 16px auto 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--gold);
+  }
+  .api-key-form {
+    max-width: 580px;
+    margin: 12px auto 0;
+    display: flex;
+    gap: 0;
+    border: 1px solid rgba(232,184,75,0.4);
+    border-radius: 6px;
+    overflow: hidden;
+    background: var(--surface);
+  }
+  .api-key-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 10px 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: var(--text);
+  }
+  .api-key-input::placeholder { color: var(--muted); }
+  .api-key-btn {
+    background: rgba(232,184,75,0.2);
+    border: none;
+    border-left: 1px solid rgba(232,184,75,0.3);
+    padding: 10px 16px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--gold);
+    transition: background 0.2s;
+    letter-spacing: 0.5px;
+  }
+  .api-key-btn:hover { background: rgba(232,184,75,0.3); }
+
+  /* SECTION */
+  .section { max-width: 1200px; margin: 0 auto; padding: 0 24px 48px; }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 2px;
+    color: var(--text);
+  }
+  .section-line { flex: 1; height: 1px; background: var(--border); }
+  .section-badge {
+    font-size: 11px;
+    background: rgba(232,184,75,0.15);
+    color: var(--gold);
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* MOVIE GRID */
+  .movie-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 16px;
+  }
+
+  .movie-card {
+    cursor: pointer;
+    border-radius: 6px;
+    overflow: hidden;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    transition: transform 0.2s, border-color 0.2s;
+    position: relative;
+  }
+  .movie-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(232,184,75,0.4);
+  }
+  .movie-card:hover .card-overlay { opacity: 1; }
+
+  .poster-wrap {
+    position: relative;
+    aspect-ratio: 2/3;
+    background: var(--bg3);
+    overflow: hidden;
+  }
+  .poster-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .poster-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 8px;
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .placeholder-icon {
+    width: 36px;
+    height: 36px;
+    border: 2px solid var(--border);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .card-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(10,10,15,0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .overlay-btn {
+    background: var(--gold);
+    color: #0A0A0F;
+    border: none;
+    padding: 8px 16px;
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 1.5px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+
+  .card-info { padding: 10px 12px; }
+  .card-title {
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 4px;
+  }
+  .card-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .card-rating {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    color: var(--gold);
+    font-weight: 500;
+  }
+  .star { font-size: 10px; }
+
+  .fav-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(10,10,15,0.7);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background 0.2s;
+    z-index: 2;
+  }
+  .fav-btn:hover { background: rgba(232,184,75,0.2); border-color: var(--gold); }
+  .fav-btn.active { background: rgba(232,184,75,0.2); border-color: var(--gold); }
+
+  /* DETAIL PANEL */
+  .detail-panel {
+    max-width: 1200px;
+    margin: 0 auto 48px;
+    padding: 0 24px;
+    display: none;
+  }
+  .detail-panel.open { display: block; }
+
+  .detail-inner {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .detail-hero {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 0;
+  }
+  @media (max-width: 600px) {
+    .detail-hero { grid-template-columns: 1fr; }
+    .detail-poster { aspect-ratio: 16/9 !important; }
+  }
+  .detail-poster {
+    aspect-ratio: 2/3;
+    background: var(--bg3);
+    overflow: hidden;
+  }
+  .detail-poster img { width: 100%; height: 100%; object-fit: cover; }
+
+  .detail-body { padding: 28px 28px; }
+  .detail-genres { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+  .genre-tag {
+    font-size: 11px;
+    padding: 3px 10px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .detail-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(28px, 4vw, 42px);
+    letter-spacing: 2px;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .detail-tagline {
+    font-size: 14px;
+    color: var(--gold);
+    font-style: italic;
+    margin-bottom: 14px;
+  }
+  .detail-stats {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+    align-items: center;
+  }
+  .stat-item { display: flex; flex-direction: column; gap: 2px; }
+  .stat-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); }
+  .stat-val { font-size: 16px; font-weight: 500; }
+  .stat-val.gold { color: var(--gold); }
+
+  .rating-bar-wrap { margin-bottom: 20px; }
+  .rating-bar-bg {
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    width: 200px;
+    overflow: hidden;
+  }
+  .rating-bar-fill {
+    height: 100%;
+    background: var(--gold);
+    border-radius: 2px;
+    transition: width 0.8s ease;
+  }
+
+  .detail-overview {
+    font-size: 14px;
+    line-height: 1.7;
+    color: rgba(240,237,230,0.8);
+    border-left: 2px solid var(--gold);
+    padding-left: 14px;
+  }
+  .close-detail {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 6px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    font-family: 'DM Sans', sans-serif;
+    margin: 16px 0 0 0;
+    letter-spacing: 0.5px;
+  }
+  .close-detail:hover { border-color: var(--red); color: var(--red); }
+
+  /* TABS */
+  .tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+  .tab-btn {
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--muted);
+    letter-spacing: 0.5px;
+    transition: color 0.2s, border-color 0.2s;
+    margin-bottom: -1px;
+  }
+  .tab-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+  .tab-btn:hover:not(.active) { color: var(--text); }
+
+  /* FAVORITES */
+  .empty-state {
+    text-align: center;
+    padding: 60px 24px;
+    color: var(--muted);
+  }
+  .empty-icon {
+    font-size: 40px;
+    margin-bottom: 14px;
+  }
+  .empty-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 2px;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  /* LOADING */
+  .skeleton-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 16px;
+  }
+  .skeleton-card { border-radius: 6px; overflow: hidden; }
+  .skeleton-poster {
+    aspect-ratio: 2/3;
+    background: linear-gradient(90deg, var(--surface) 25%, var(--bg3) 50%, var(--surface) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+  .skeleton-info { padding: 10px 12px; background: var(--surface); }
+  .skeleton-line {
+    height: 12px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, var(--bg3) 25%, var(--surface) 50%, var(--bg3) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    margin-bottom: 6px;
+  }
+  .skeleton-line.short { width: 60%; }
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  .loading-msg {
+    text-align: center;
+    padding: 40px;
+    color: var(--muted);
+    font-size: 14px;
+    letter-spacing: 1px;
+  }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--surface);
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 13px;
+    z-index: 1000;
+    transition: transform 0.3s;
+    pointer-events: none;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* RESPONSIVE */
+  @media (max-width: 480px) {
+    .hero { padding: 40px 16px 32px; }
+    .section { padding: 0 16px 40px; }
+    .movie-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; }
+    .detail-body { padding: 20px 16px; }
+  }
+</style>
+
+<div id="app">
+  <nav class="navbar">
+    <div class="logo">CINE<span>SCOPE</span></div>
+    <div class="nav-links">
+      <button class="nav-link active" onclick="switchTab('home')">Home</button>
+      <button class="nav-link" onclick="switchTab('favorites')">Favourites <span id="fav-count" style="background:rgba(232,184,75,0.2);color:var(--gold);border-radius:10px;padding:1px 6px;font-size:11px;"></span></button>
+    </div>
+  </nav>
+
+  <div id="tab-home">
+    <div class="hero">
+      <div class="hero-label">Your personal cinema guide</div>
+      <h1 class="hero-title">DISCOVER YOUR<br><em>NEXT FILM</em></h1>
+      <div class="search-wrap">
+        <input class="search-input" id="search-input" type="text" placeholder="Search movies…" onkeydown="if(event.key==='Enter')doSearch()" />
+        <button class="search-btn" onclick="doSearch()">SEARCH</button>
+      </div>
+      <div class="api-notice" id="api-notice">
+        <span>🔑</span>
+        <span>Enter your TMDb API key to load live data</span>
+      </div>
+      <div class="api-key-form">
+        <input class="api-key-input" id="api-key-input" type="password" placeholder="Paste TMDb API key here (v3 auth)…" />
+        <button class="api-key-btn" onclick="saveApiKey()">SAVE KEY</button>
+      </div>
+    </div>
+
+    <!-- DETAIL PANEL (inline) -->
+    <div class="detail-panel" id="detail-panel">
+      <div class="detail-inner">
+        <div class="detail-hero">
+          <div class="detail-poster">
+            <img id="detail-poster-img" src="" alt="" />
+          </div>
+          <div class="detail-body">
+            <div class="detail-genres" id="detail-genres"></div>
+            <div class="detail-title" id="detail-title">Movie Title</div>
+            <div class="detail-tagline" id="detail-tagline"></div>
+            <div class="detail-stats">
+              <div class="stat-item">
+                <div class="stat-label">Rating</div>
+                <div class="stat-val gold" id="detail-rating">—</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-label">Release</div>
+                <div class="stat-val" id="detail-year">—</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-label">Language</div>
+                <div class="stat-val" id="detail-lang">—</div>
+              </div>
+            </div>
+            <div class="rating-bar-wrap">
+              <div class="rating-bar-bg"><div class="rating-bar-fill" id="rating-bar" style="width:0%"></div></div>
+            </div>
+            <div class="detail-overview" id="detail-overview">Overview loading…</div>
+            <button class="close-detail" onclick="closeDetail()">✕ Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEARCH RESULTS -->
+    <div class="section" id="search-section" style="display:none">
+      <div class="section-header">
+        <div class="section-title">SEARCH RESULTS</div>
+        <div class="section-line"></div>
+        <div class="section-badge" id="result-count">0 films</div>
+      </div>
+      <div id="search-grid" class="movie-grid"></div>
+    </div>
+
+    <!-- POPULAR / TRENDING -->
+    <div class="section" id="popular-section">
+      <div class="section-header">
+        <div class="section-title">TRENDING NOW</div>
+        <div class="section-line"></div>
+        <div class="section-badge">Popular</div>
+      </div>
+      <div id="popular-grid" class="movie-grid"></div>
+    </div>
+
+    <!-- RECOMMENDED -->
+    <div class="section" id="rec-section" style="display:none">
+      <div class="section-header">
+        <div class="section-title">YOU MIGHT LIKE</div>
+        <div class="section-line"></div>
+        <div class="section-badge">Recommendations</div>
+      </div>
+      <div id="rec-grid" class="movie-grid"></div>
+    </div>
+  </div>
+
+  <div id="tab-favorites" style="display:none">
+    <div style="padding-top:24px">
+      <div class="section">
+        <div class="section-header">
+          <div class="section-title">YOUR COLLECTION</div>
+          <div class="section-line"></div>
+          <div class="section-badge" id="fav-badge">0 films</div>
+        </div>
+        <div id="fav-grid" class="movie-grid"></div>
+        <div id="fav-empty" class="empty-state">
+          <div class="empty-icon">🎞</div>
+          <div class="empty-title">YOUR COLLECTION IS EMPTY</div>
+          <div style="font-size:14px;color:var(--muted);margin-top:6px">Tap the bookmark on any movie to save it here</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const IMG_BASE = 'https://image.tmdb.org/t/p/w500';
+  const IMG_ORIG = 'https://image.tmdb.org/t/p/original';
+  let API_KEY = '';
+  let favorites = JSON.parse(localStorage.getItem('cinescope_favs') || '[]');
+
+  function saveApiKey() {
+    const k = document.getElementById('api-key-input').value.trim();
+    if (!k) { showToast('Please enter a valid API key'); return; }
+    API_KEY = k;
+    document.getElementById('api-notice').style.display = 'none';
+    document.querySelector('.api-key-form').style.display = 'none';
+    showToast('API key saved — loading movies…');
+    loadPopular();
+  }
+
+  async function apiFetch(url) {
+    if (!API_KEY) return null;
+    const sep = url.includes('?') ? '&' : '?';
+    const r = await fetch(`https://api.themoviedb.org/3${url}${sep}api_key=${API_KEY}`);
+    if (!r.ok) throw new Error('API error');
+    return r.json();
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2800);
+  }
+
+  function switchTab(tab) {
+    document.getElementById('tab-home').style.display = tab === 'home' ? 'block' : 'none';
+    document.getElementById('tab-favorites').style.display = tab === 'favorites' ? 'block' : 'none';
+    document.querySelectorAll('.nav-link').forEach((b,i) => {
+      b.classList.toggle('active', (i===0 && tab==='home') || (i===1 && tab==='favorites'));
+    });
+    if (tab === 'favorites') renderFavorites();
+  }
+
+  function renderFavorites() {
+    const grid = document.getElementById('fav-grid');
+    const empty = document.getElementById('fav-empty');
+    const badge = document.getElementById('fav-badge');
+    badge.textContent = `${favorites.length} film${favorites.length !== 1 ? 's' : ''}`;
+    if (!favorites.length) {
+      grid.innerHTML = '';
+      empty.style.display = 'block';
+    } else {
+      empty.style.display = 'none';
+      grid.innerHTML = favorites.map(m => movieCardHTML(m, true)).join('');
+    }
+    updateFavCount();
+  }
+
+  function updateFavCount() {
+    const el = document.getElementById('fav-count');
+    el.textContent = favorites.length > 0 ? favorites.length : '';
+  }
+
+  function isFav(id) { return favorites.some(f => f.id === id); }
+
+  function toggleFav(id, el) {
+    if (isFav(id)) {
+      favorites = favorites.filter(f => f.id !== id);
+      showToast('Removed from collection');
+      el.classList.remove('active');
+      el.textContent = '♡';
+    } else {
+      const card = window._movieCache && window._movieCache[id];
+      if (card) {
+        favorites.push(card);
+        showToast('Added to collection');
+        el.classList.add('active');
+        el.textContent = '♥';
+      }
+    }
+    localStorage.setItem('cinescope_favs', JSON.stringify(favorites));
+    updateFavCount();
+  }
+
+  if (!window._movieCache) window._movieCache = {};
+
+  function movieCardHTML(movie, fromFav) {
+    const poster = movie.poster_path ? `<img src="${IMG_BASE}${movie.poster_path}" alt="${movie.title}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=poster-placeholder><div class=placeholder-icon>🎬</div><span>No poster</span></div>'" />` : `<div class="poster-placeholder"><div class="placeholder-icon">🎬</div><span>No poster</span></div>`;
+    const year = (movie.release_date||'').slice(0,4) || '—';
+    const rating = movie.vote_average ? (movie.vote_average/1).toFixed(1) : '—';
+    const favActive = isFav(movie.id) ? 'active' : '';
+    const favIcon = isFav(movie.id) ? '♥' : '♡';
+    window._movieCache[movie.id] = movie;
+    return `<div class="movie-card">
+      <div class="poster-wrap">
+        ${poster}
+        <div class="card-overlay"><button class="overlay-btn" onclick="openDetail(${movie.id})">VIEW</button></div>
+        <button class="fav-btn ${favActive}" id="fav-${movie.id}" onclick="event.stopPropagation();toggleFav(${movie.id},this)">${favIcon}</button>
+      </div>
+      <div class="card-info">
+        <div class="card-title">${movie.title}</div>
+        <div class="card-meta">
+          <span>${year}</span>
+          <span class="card-rating"><span class="star">★</span>${rating}</span>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  function skeletonGrid(n) {
+    return Array(n).fill(0).map(() => `
+      <div class="skeleton-card">
+        <div class="skeleton-poster"></div>
+        <div class="skeleton-info">
+          <div class="skeleton-line"></div>
+          <div class="skeleton-line short"></div>
+        </div>
+      </div>`).join('');
+  }
+
+  async function loadPopular() {
+    const grid = document.getElementById('popular-grid');
+    grid.innerHTML = skeletonGrid(8);
+    try {
+      const data = await apiFetch('/movie/popular?page=1');
+      if (!data) { grid.innerHTML = '<div class="loading-msg">Enter your TMDb API key above to load movies</div>'; return; }
+      grid.innerHTML = data.results.slice(0, 12).map(m => movieCardHTML(m)).join('');
+    } catch(e) {
+      grid.innerHTML = '<div class="loading-msg">Could not load movies — check your API key</div>';
+    }
+  }
+
+  async function doSearch() {
+    const q = document.getElementById('search-input').value.trim();
+    if (!q) { showToast('Enter a movie name to search'); return; }
+    if (!API_KEY) { showToast('Please enter your TMDb API key first'); return; }
+    const sec = document.getElementById('search-section');
+    const grid = document.getElementById('search-grid');
+    const cnt = document.getElementById('result-count');
+    sec.style.display = 'block';
+    grid.innerHTML = skeletonGrid(6);
+    closeDetail();
+    try {
+      const data = await apiFetch(`/search/movie?query=${encodeURIComponent(q)}`);
+      if (!data || !data.results.length) {
+        grid.innerHTML = '<div class="loading-msg">No results found</div>';
+        cnt.textContent = '0 films';
+      } else {
+        cnt.textContent = `${data.results.length} film${data.results.length!==1?'s':''}`;
+        grid.innerHTML = data.results.slice(0, 12).map(m => movieCardHTML(m)).join('');
+      }
+    } catch(e) {
+      grid.innerHTML = '<div class="loading-msg">Search failed — check your API key</div>';
+    }
+  }
+
+  async function openDetail(id) {
+    const panel = document.getElementById('detail-panel');
+    panel.classList.add('open');
+    panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.getElementById('detail-title').textContent = 'Loading…';
+    document.getElementById('detail-overview').textContent = '';
+    document.getElementById('detail-tagline').textContent = '';
+    document.getElementById('detail-genres').innerHTML = '';
+    document.getElementById('detail-poster-img').src = '';
+    document.getElementById('rating-bar').style.width = '0%';
+
+    try {
+      const movie = await apiFetch(`/movie/${id}`);
+      if (!movie) return;
+      window._movieCache[id] = { ...window._movieCache[id], ...movie };
+
+      document.getElementById('detail-title').textContent = movie.title;
+      document.getElementById('detail-tagline').textContent = movie.tagline || '';
+      document.getElementById('detail-overview').textContent = movie.overview || 'No overview available.';
+      document.getElementById('detail-year').textContent = (movie.release_date||'').slice(0,4) || '—';
+      document.getElementById('detail-rating').textContent = movie.vote_average ? movie.vote_average.toFixed(1)+' / 10' : '—';
+      document.getElementById('detail-lang').textContent = (movie.original_language||'').toUpperCase() || '—';
+      document.getElementById('rating-bar').style.width = (movie.vote_average * 10) + '%';
+      if (movie.poster_path) {
+        document.getElementById('detail-poster-img').src = IMG_BASE + movie.poster_path;
+      }
+      const genres = (movie.genres||[]).slice(0,4);
+      document.getElementById('detail-genres').innerHTML = genres.map(g => `<span class="genre-tag">${g.name}</span>`).join('');
+
+      loadRecommendations(id);
+    } catch(e) {
+      document.getElementById('detail-title').textContent = 'Failed to load';
+    }
+  }
+
+  async function loadRecommendations(id) {
+    const sec = document.getElementById('rec-section');
+    const grid = document.getElementById('rec-grid');
+    sec.style.display = 'block';
+    grid.innerHTML = skeletonGrid(6);
+    try {
+      const data = await apiFetch(`/movie/${id}/recommendations`);
+      if (!data || !data.results.length) {
+        const pop = await apiFetch('/movie/popular');
+        grid.innerHTML = (pop.results||[]).slice(0,6).map(m => movieCardHTML(m)).join('');
+      } else {
+        grid.innerHTML = data.results.slice(0,6).map(m => movieCardHTML(m)).join('');
+      }
+    } catch(e) {
+      grid.innerHTML = '<div class="loading-msg">Could not load recommendations</div>';
+    }
+  }
+
+  function closeDetail() {
+    document.getElementById('detail-panel').classList.remove('open');
+    document.getElementById('rec-section').style.display = 'none';
+  }
+
+  updateFavCount();
+  loadPopular();
+</script>
