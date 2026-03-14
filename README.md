@@ -138,5 +138,5 @@ Users can bookmark movies and store them locally in the browser.
 
 **Harshan Kumar**
 
-GitHub: https://github.com/yourusername
-LinkedIn: https://linkedin.com/in/yourprofile
+GitHub: https://github.com/Harshan2301
+LinkedIn: https://www.linkedin.com/in/mulagundla-harshan-30b368387
